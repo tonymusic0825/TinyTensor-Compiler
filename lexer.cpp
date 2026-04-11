@@ -33,6 +33,9 @@ void Token::printInfo() const {
         case TokenType::RPAREN:
             cout << "RPAREN: " << value;
             break;
+        case TokenType::UNKNOWN:
+            cout << "UNKNOWN: " << value;
+            break;
     }
 
     cout << " @ " << line << ":" << column;
@@ -84,8 +87,8 @@ vector<Token> Lexer::tokenize() {
             while (pos < source.length()) {
                 
                 if (source[pos] == '.' && float_num) {
-                    cout << "ERROR: numbers should not contain more than one decimal" << endl;
-                    exit(1);
+                    // We let the outer loop handle invalid float
+                    break; 
                 }
 
                 if (source[pos] == '.') {
@@ -125,6 +128,10 @@ vector<Token> Lexer::tokenize() {
             case '+':
                 tokenized.emplace_back(TokenType::PLUS, c, cur_line, cur_col);
                 break;
+            default: // Hit an unknown character
+                tokenized.emplace_back(TokenType::UNKNOWN, c, cur_line, cur_col);
+                cout << "Lexical Error: Unrecognized character '" 
+                    << c << "' at Line " << cur_line << ", Col " << cur_col << endl;
         }
 
         pos++;

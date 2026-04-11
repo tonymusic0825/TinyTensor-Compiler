@@ -11,7 +11,8 @@ enum class TokenType {
     STAR,           // '*'
     LPAREN,         // '('
     RPAREN,         // ')'
-    END_OF_FILE     // EOF 
+    END_OF_FILE,    // EOF 
+    UNKNOWN         // Essentially Error
 };
 
 struct Token {
