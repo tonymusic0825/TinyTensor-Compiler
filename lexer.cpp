@@ -79,10 +79,34 @@ vector<Token> Lexer::tokenize() {
         if (isdigit(c)) {
             size_t temp_pos = pos;
             string num = "";
-            while (pos < source.length() && isdigit(source[pos])) {
-                num += source[pos];
-                pos++;
+            bool float_num = false;
+
+            while (pos < source.length()) {
+                
+                if (source[pos] == '.' && float_num) {
+                    cout << "ERROR: numbers should not contain more than one decimal" << endl;
+                    exit(1);
+                }
+
+                if (source[pos] == '.') {
+                    float_num = true;
+                    num += source[pos];
+                    pos++;
+                    continue;
+                } else if (isdigit(source[pos])) {
+                    num += source[pos];
+                    pos++;
+                    continue;
+                } else {
+                    break; 
+                }
             }
+
+            // If the number ended with decimal '.' we will add 0 at the end
+            if (num[num.length() - 1] == '.') {
+                num += '0';
+            }
+
             tokenized.emplace_back(TokenType::NUMBER, num, cur_line, cur_col);
             cur_col += pos - temp_pos;
             continue;
