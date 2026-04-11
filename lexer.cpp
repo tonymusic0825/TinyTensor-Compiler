@@ -51,7 +51,7 @@ vector<Token> Lexer::tokenize() {
     while (pos < source.length()) {
         char c = source[pos];
 
-        if (isspace(c)) {
+        if (c == ' ') {
             pos++;
             cur_col++;
             continue;
