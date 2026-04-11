@@ -17,10 +17,12 @@ enum class TokenType {
 struct Token {
     TokenType type;
     std::string value;
+    size_t line;
+    size_t column;
 
     Token() {};
-    Token(TokenType t, std::string v);
-    Token(TokenType t, char c);
+    Token(TokenType t, std::string v, size_t l, size_t c);
+    Token(TokenType t, char v, size_t l, size_t c);
 
     void printInfo() const;
 };
