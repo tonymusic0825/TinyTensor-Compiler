@@ -1,11 +1,14 @@
-# Variables
 CXX = g++
 CXXFLAGS = -Wall -Wextra -g -Wpedantic
 
-all: main
+main: test.o lexer.o
+	$(CXX) $(CXXFLAGS) -o main test.o lexer.o
 
-main: lexer.cpp
-	$(CXX) $(CXXFLAGS) -o main lexer.cpp
+test.o: test.cpp lexer.h
+	$(CXX) $(CXXFLAGS) -c test.cpp -o test.o
+
+lexer.o: lexer.cpp lexer.h
+	$(CXX) $(CXXFLAGS) -c lexer.cpp -o lexer.o
 
 clean:
-	rm -f main
+	rm -f *.o main
