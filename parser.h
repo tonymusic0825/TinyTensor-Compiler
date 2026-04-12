@@ -39,6 +39,24 @@ class BinOpNode : public ASTNode {
 class Parser {
     public:
         std::vector<Token> tokens;
+        size_t pos = 0;
+
+        Parser(const std::vector<Token>& t) : tokens(t) {}
+
+        // Helper Functions
+        Token current() const;
+        void advance();
+        void expect(TokenType type, std::string error_msg);
+
+        // Grammar Methods
+        std::unique_ptr<ASTNode> parseFactor();
+        std::unique_ptr<ASTNode> parseTerm();
+        std::unique_ptr<ASTNode> parseExpression();
+
+        // Public interface
+        std::unique_ptr<ASTNode> parse() { return parseExpression(); }
+
+
 };
 
 #endif
