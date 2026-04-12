@@ -17,12 +17,16 @@ class NumNode : public ASTNode {
     public:
         double value;
 
+        NumNode(double v);
+
         void print(int depth = 0) const override; 
 };
 
 class IdNode : public ASTNode {
     public:
         std::string name;
+
+        IdNode(std::string n);
 
         void print(int depth = 0) const override;
 };
@@ -33,6 +37,8 @@ class BinOpNode : public ASTNode {
         std::unique_ptr<ASTNode> left;
         std::unique_ptr<ASTNode> right;
 
+        BinOpNode(std::string o, std::unique_ptr<ASTNode> l, std::unique_ptr<ASTNode> r);
+
         void print(int depth = 0) const override;
 };
 
@@ -41,7 +47,7 @@ class Parser {
         std::vector<Token> tokens;
         size_t pos = 0;
 
-        Parser(const std::vector<Token>& t) : tokens(t) {}
+        Parser(const std::vector<Token>& t);
 
         // Helper Functions
         Token current() const;

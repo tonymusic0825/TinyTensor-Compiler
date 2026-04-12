@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -g -Wpedantic
 
-OBJS = test.o lexer.o
+OBJS = test.o lexer.o parser.o
 TARGET = main
 
 $(TARGET): $(OBJS)
