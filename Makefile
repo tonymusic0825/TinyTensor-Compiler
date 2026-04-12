@@ -1,14 +1,18 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -g -Wpedantic
 
-main: test.o lexer.o
-	$(CXX) $(CXXFLAGS) -o main test.o lexer.o
+OBJS = test.o lexer.o
+TARGET = main
 
-test.o: test.cpp lexer.h
-	$(CXX) $(CXXFLAGS) -c test.cpp -o test.o
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-lexer.o: lexer.cpp lexer.h
-	$(CXX) $(CXXFLAGS) -c lexer.cpp -o lexer.o
+# Generic rule for building object files with header dependencies
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+
+# Include generated dependency files
+-include $(OBJS:.o=.d)
 
 clean:
-	rm -f *.o main
+	rm -f *.o *.d $(TARGET)
