@@ -55,6 +55,23 @@ int main() {
     // Print AST
     cout << "==== AST Output ====" << endl;
     root->print();
+    cout << endl;
 
+
+    // TEST PARSER
+    cout << "==== PARSER TEST OUTPUT ====" << endl;
+    code = "(weights * 5.5) + bias";
+    
+    // 1. Lex the code
+    Lexer lexer(code);
+    vector<Token> tokens = lexer.tokenize();
+    
+    // 2. Parse the tokens
+    Parser parser(tokens);
+    auto astRoot = parser.parse();
+    
+    // 3. Visualize the tree
+    astRoot->print();
+    
     return 0;
 }

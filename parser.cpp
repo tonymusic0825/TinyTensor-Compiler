@@ -52,7 +52,6 @@ void BinOpNode::print(int depth) const {
 }
 
 
-
 // Parser
 Parser::Parser(const vector<Token>& t) : tokens(t) {} 
 
@@ -73,3 +72,64 @@ void Parser::expect(TokenType type, string error_msg) {
     throw runtime_error(error_msg);
 }
 
+
+// Grammer Methods
+/**
+ * Expression   ->   Term (+ Term)
+ * Term         ->   Factor (* Factor)
+ * Factor       ->   NUMBER | IDENTIFIER | (Expression)
+ */
+unique_ptr<ASTNode> Parser::parseFactor() {
+    
+    Token cur = current();
+    unique_ptr<ASTNode> ret;
+
+    switch(cur.type) {
+        case TokenType::NUMBER:
+            ret = make_unique<NumNode>(stod(cur.value));
+            advance();
+            break;
+        case TokenType::IDENTIFIER:
+            ret = make_unique<IdNode>(cur.value); 
+            advance();
+            break;
+        case TokenType::LPAREN:
+            advance();
+            ret = parseExpression();
+            expect(TokenType::RPAREN, "Expected closing ')'");
+            break; 
+        default:
+            throw runtime_error("Unexpected token at line " + to_string(cur.line)
+                + " column " + to_string(cur.column));
+        }
+            
+    return ret;
+}
+
+unique_ptr<ASTNode> Parser::parseTerm() {
+
+    auto left = parseFactor();
+
+    while(current().type == TokenType::STAR) {
+        string op = current().value;
+        advance();
+        auto right = parseFactor();
+        left = make_unique<BinOpNode>(op, move(left), move(right));
+    }
+
+    return left;
+}
+
+unique_ptr<ASTNode> Parser::parseExpression() {
+    
+    auto left = parseTerm();
+
+    while (current().type == TokenType::PLUS) {
+        string op = current().value;
+        advance();
+        auto right = parseTerm();
+        left = make_unique<BinOpNode>(op, move(left), move(right));
+    }
+
+    return left;
+}
