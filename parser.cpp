@@ -51,3 +51,25 @@ void BinOpNode::print(int depth) const {
     right->print(depth + 1); 
 }
 
+
+
+// Parser
+Parser::Parser(const vector<Token>& t) : tokens(t) {} 
+
+Token Parser::current() const {
+    return tokens[pos];
+}
+
+void Parser::advance() {
+    pos++;
+}
+
+void Parser::expect(TokenType type, string error_msg) {
+    if (current().type == type) {
+        advance();
+        return;
+    } 
+
+    throw runtime_error(error_msg);
+}
+
