@@ -60,7 +60,7 @@ int main() {
 
     // TEST PARSER
     cout << "==== PARSER TEST OUTPUT ====" << endl;
-    code = "(weights * 5.5) + bias";
+    code = "(weights * 5.5) + bias + weights2 * this + yes";
     
     // 1. Lex the code
     Lexer lexer(code);
